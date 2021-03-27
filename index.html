@@ -104,7 +104,7 @@
             document.querySelector(".connection-established").classList.remove("hidden");
         }
         else if(event.data.startsWith("P")){
-            $(".pChat").append("<p> To " + clientNo + " " + event.data.substring(1) + "<p>");
+            $(".pChat").append("<p>  " + clientNo + " " + event.data.substring(1) + "<p>");
         }
         else if(event.data.startsWith("G")){
             $(".gChat").append("<p>" + groupName + " " + event.data.substring(1) + "<p>");

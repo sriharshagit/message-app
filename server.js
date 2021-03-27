@@ -125,7 +125,7 @@ wss.on('connection', async (ws) => {
                     console.log(e);
                 }
       
-                
+                ws.send('P from [' + userPhone + ']  ' + personalMessage);
                 if (phoneToClientMap.has(otherPhone)) {
                     otherClient = phoneToClientMap.get(otherPhone);
                     otherClient.send('P from [' + userPhone + ']  ' + personalMessage);
@@ -138,7 +138,7 @@ wss.on('connection', async (ws) => {
                     
                 }
              
-                ws.send('P from [' + userPhone + ']  ' + personalMessage);
+                
 
             }
             
