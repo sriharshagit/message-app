@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+        - ~/apimongo/data:/data/db
+
+  messageserver:
+    container_name: messageserver
+    restart: always
+    image: hrshsunny7/message-app
+    ports:
+      - "9001:9001"
+    command: ['/bin/bash', -c, 'node server.js']
+    links:
+      - mongo
+    depends_on:
+      - mongo
+
+  messageclient:
+    container_name: messageclient
+    restart: always
+    image: hrshsunny7/message-app
+    ports:
+      - "3001:3001"
+    command: ['/bin/bash', -c, 'node index.js']
+    links:
+      - mongo
+
+  
+  

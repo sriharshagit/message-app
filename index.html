@@ -1,0 +1,118 @@
+<!--<button type="button" id="send_button" action="formAction2">Send</button>
+<hr>
+<div id="result"></div>-->
+<html>
+<head>
+    <style>
+        .hidden{
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <div class="register">
+        <label for="userId">Login</label><br><br>
+        <input type="text" id="userId" name="userId"><br><br>
+        <button class="registerButton">register Me!</button><br><br>
+    </div>
+
+    <div class="connection-established hidden">
+        <label for="groupId">Subscribe to group</label><br><br>
+        <input type="text" id="groupId" name="groupId"><br><br>
+        <button class="subscribe">Subscribe</button><br><br>
+
+        <div>
+            <label for="pId">Contact No(Contact No space personal message)</label><br><br>
+            <input type="text" id="pId" name="pId"><br><br>
+            <button class="connect">connect Me!</button><br><br>
+        </div>
+        <div class="pChat">
+        </div>
+
+        <div>
+            <label for="groupData">Group Name(Group Name space group message)</label><br><br>
+            <input type="text" id="groupData" name="groupData"><br><br>
+            <button class="groupConnect">connect Me!</button><br><br>
+        </div>
+        <div class="gChat">
+        </div>
+
+    </div>
+
+
+</body>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js" type="text/javascript"></script>
+<script type="text/javascript">
+    
+    let ws = new WebSocket("ws://localhost:9001");
+
+    let registerButton = document.querySelector(".registerButton");
+    registerButton.addEventListener('click', () => {
+        let clientPhoneNo = document.getElementById("userId").value;
+        if(clientPhoneNo.length===0){
+            alert("contact no. can't be empty");
+        }
+        else {
+            ws.send("registration " + clientPhoneNo);
+        }
+    });
+
+    let subscribe = document.querySelector(".subscribe");
+    subscribe.addEventListener("click", () => {
+        let groupELement =  document.getElementById("groupId");
+        let groupId = groupELement.value;
+        groupELement.value = "";
+        ws.send("subscribe " + groupId);
+    });
+
+    let clientNo = "";
+    let pConnect = document.querySelector(".connect");
+    pConnect.addEventListener("click", () => {
+        let userPhoneNo = document.getElementById("pId").value;
+        clientNo = userPhoneNo.substring(0,userPhoneNo.indexOf(" "));
+        if(userPhoneNo.length===0){
+            alert("contact no. can't be empty");
+        }
+        else {
+            ws.send("personal " + userPhoneNo);
+            document.getElementById("pId").value = "";
+        }
+    });
+
+    let groupName = "";
+    let gConnect = document.querySelector(".groupConnect");
+    gConnect.addEventListener("click", () => {
+        let groupData = document.getElementById("groupData").value;
+        groupName = groupData.substring(0,groupData.indexOf(" "));
+        if(groupName.length===0){
+            alert("group can't be empty");
+        }
+        else {
+            ws.send("group " + groupData);
+            document.getElementById("groupData").value = "";
+        }
+    });
+
+    ws.onmessage = function (event) {
+        if(event.data === "R success"){
+            document.querySelector(".register").classList.add("hidden");
+            document.querySelector(".connection-established").classList.remove("hidden");
+        }
+        else if(event.data.startsWith("P")){
+            $(".pChat").append("<p> To " + clientNo + " " + event.data.substring(1) + "<p>");
+        }
+        else if(event.data.startsWith("G")){
+            $(".gChat").append("<p>" + groupName + " " + event.data.substring(1) + "<p>");
+        }
+        else if(event.data.startsWith("S ")){
+                alert(event.data.substring(2));
+            }
+    };
+
+</script>
+</html>
