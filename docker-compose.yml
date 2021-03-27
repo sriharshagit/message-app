@@ -10,7 +10,7 @@ services:
   messageserver:
     container_name: messageserver
     restart: always
-    image: hrshsunny7/message-app
+    image: hrshsunny7/message-app:latest
     ports:
       - "9001:9001"
     command: ['/bin/bash', -c, 'node server.js']
@@ -22,7 +22,7 @@ services:
   messageclient:
     container_name: messageclient
     restart: always
-    image: hrshsunny7/message-app
+    image: hrshsunny7/message-app:latest
     ports:
       - "3001:3001"
     command: ['/bin/bash', -c, 'node index.js']
